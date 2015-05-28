@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+
+CLASS_DIR=~/.local/share/jdcli/classes
+
+class_name="$1"
+
+if ! test "$class_name"; then
+    echo "Usage: $0 <class name>" >&2
+    exit 1
+fi
+
+class_file="$CLASS_DIR/"$(echo $class_name | sed 's_\._/_g')
+
+if ! [ -f "$class_file" ]; then
+    echo "Class not found: $class_name" >&2
+    exit 2
+fi
+
+less --raw-control-chars "$class_file"
