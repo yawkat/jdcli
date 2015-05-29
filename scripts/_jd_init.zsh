@@ -3,6 +3,7 @@
 _index=~/.local/share/jdcli/classes/.index
 
 alias jd=$(dirname "$0")/jd
+alias update-jd="java -jar "$(dirname "$0")"/../target/jdcli-1.0-SNAPSHOT.jar"
 
 _jd_list_pkg() {
     grep "^$1" "$_index" | grep -e "^$1\(.[^\.]*\)#$" | sed 's/#$//'
