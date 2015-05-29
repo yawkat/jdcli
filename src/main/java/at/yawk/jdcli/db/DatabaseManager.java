@@ -165,12 +165,18 @@ public class DatabaseManager {
                                 String name = relative.toString().replace('/', '.');
                                 // remove .txt extension
                                 name = name.substring(0, name.length() - ".txt".length());
-                                while (indexed.add(name)) {
+                                boolean pkg = false;
+                                while (true) {
+                                    if (pkg) { name += '#'; }
+                                    if (!indexed.add(name)) {
+                                        break;
+                                    }
                                     indexWriter.write(name);
                                     indexWriter.write('\n');
                                     int lastDot = name.lastIndexOf('.');
                                     if (lastDot == -1) { break; }
                                     name = name.substring(0, lastDot);
+                                    pkg = true;
                                 }
 
                                 // print progress
