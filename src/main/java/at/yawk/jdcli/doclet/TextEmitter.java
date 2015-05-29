@@ -1,5 +1,7 @@
 package at.yawk.jdcli.doclet;
 
+import at.yawk.logging.ansi.SupportedAnsiCode;
+
 /**
  * @author yawkat
  */
@@ -22,5 +24,5 @@ public interface TextEmitter {
 
     void newParagraph();
 
-    void bold(boolean bold);
+    void format(SupportedAnsiCode code);
 }

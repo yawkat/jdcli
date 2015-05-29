@@ -1,5 +1,6 @@
 package at.yawk.jdcli.doclet;
 
+import at.yawk.logging.ansi.SupportedAnsiCode;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,9 +86,9 @@ class HtmlWriter {
             String value = instructionMatcher.group(2);
             switch (instruction.toLowerCase()) {
             case "link":
-                emitter.bold(true);
+                emitter.format(SupportedAnsiCode.UNDERLINE);
                 emitter.emit(value);
-                emitter.bold(false);
+                emitter.format(SupportedAnsiCode.UNDERLINE.reset());
                 break;
             default:
                 emitter.emit(value);

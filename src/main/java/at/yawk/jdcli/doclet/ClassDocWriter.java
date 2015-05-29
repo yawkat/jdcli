@@ -1,5 +1,6 @@
 package at.yawk.jdcli.doclet;
 
+import at.yawk.logging.ansi.SupportedAnsiCode;
 import com.sun.javadoc.*;
 
 /**
@@ -16,9 +17,10 @@ public class ClassDocWriter {
         emitter.emit(classDoc.modifiers() + " ");
         String pkg = classDoc.containingPackage().name();
         emitter.emit(pkg.isEmpty() ? "" : pkg + ".");
-        emitter.bold(true);
+        emitter.format(SupportedAnsiCode.BOLD);
+        emitter.format(SupportedAnsiCode.CYAN);
         emitter.emit(classDoc.qualifiedName().substring(pkg.isEmpty() ? 0 : pkg.length() + 1));
-        emitter.bold(false);
+        emitter.format(SupportedAnsiCode.RESET);
         Type sup = classDoc.superclassType();
         if (sup != null) {
             emitter.emit("\n  extends " + sup.qualifiedTypeName());
@@ -66,9 +68,9 @@ public class ClassDocWriter {
             emitter.emit(field.modifiers() + " ");
         }
         emitter.emit(field.type().simpleTypeName() + " ");
-        emitter.bold(true);
+        emitter.format(SupportedAnsiCode.BOLD);
         emitter.emit(field.name());
-        emitter.bold(false);
+        emitter.format(SupportedAnsiCode.RESET);
         if (field.constantValueExpression() != null) {
             emitter.emit(" = " + field.constantValueExpression());
         }
@@ -84,13 +86,13 @@ public class ClassDocWriter {
         }
         if (doc instanceof MethodDoc) {
             emitter.emit(((MethodDoc) doc).returnType().simpleTypeName() + " ");
-            emitter.bold(true);
+            emitter.format(SupportedAnsiCode.BOLD);
             emitter.emit(doc.name());
-            emitter.bold(false);
+            emitter.format(SupportedAnsiCode.RESET);
         } else {
-            emitter.bold(true);
+            emitter.format(SupportedAnsiCode.BOLD);
             emitter.emit(doc.containingClass().simpleTypeName());
-            emitter.bold(false);
+            emitter.format(SupportedAnsiCode.RESET);
         }
         emitter.emit("(");
         emitter.lineUpIndentWithText();
@@ -129,9 +131,11 @@ public class ClassDocWriter {
 
     private void emitTitle(String title) {
         emitter.unindent();
-        emitter.bold(true);
+        emitter.format(SupportedAnsiCode.BOLD);
+        emitter.format(SupportedAnsiCode.UNDERLINE);
+        emitter.format(SupportedAnsiCode.YELLOW);
         emitter.emit(title.toUpperCase());
-        emitter.bold(false);
+        emitter.format(SupportedAnsiCode.RESET);
         emitter.indent();
         emitter.newParagraph();
     }

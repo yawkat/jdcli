@@ -1,5 +1,8 @@
 package at.yawk.jdcli.doclet;
 
+import at.yawk.logging.ansi.SupportedAnsiCode;
+import dk.brics.automaton.Automaton;
+import dk.brics.automaton.RunAutomaton;
 import java.util.*;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +14,14 @@ import lombok.RequiredArgsConstructor;
 public class MonospacedTextEmitter implements TextEmitter {
     private static final int INDENT_UNIT = 4;
 
-    private static final String BOLD = "\033[1m";
-    private static final String UNBOLD = "\033[21m";
+    /**
+     * Automaton that accepts all format sequences
+     */
+    private static final RunAutomaton FORMAT_MATCHER = new RunAutomaton(Automaton.makeStringUnion(
+            Arrays.stream(SupportedAnsiCode.values())
+                    .map(SupportedAnsiCode::toString)
+                    .toArray(String[]::new)
+    ));
 
     private final Consumer<String> target;
     private final int width;
@@ -109,11 +118,12 @@ public class MonospacedTextEmitter implements TextEmitter {
     }
 
     private static int formatSequenceLengthAt(CharSequence input, int i) {
-        for (String f : new String[]{ BOLD, UNBOLD }) {
-            if (input.length() - i >= f.length() &&
-                f.contentEquals(input.subSequence(i, i + f.length()))) {
-                return f.length();
-            }
+        int s = FORMAT_MATCHER.getInitialState();
+        for (int j = i; j < input.length(); j++) {
+            char c = input.charAt(j);
+            s = FORMAT_MATCHER.step(s, c);
+            if (s == -1) { break; } // no match
+            if (FORMAT_MATCHER.isAccept(s)) { return j - i + 1; } // found match
         }
         return 0;
     }
@@ -172,8 +182,7 @@ public class MonospacedTextEmitter implements TextEmitter {
     }
 
     @Override
-    public void bold(boolean bold) {
-        this.bold = bold;
-        emit(bold ? BOLD : UNBOLD);
+    public void format(SupportedAnsiCode code) {
+        blockBuilder.append(code.toString());
     }
 }
