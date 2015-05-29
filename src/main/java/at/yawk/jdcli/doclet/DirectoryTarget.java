@@ -17,13 +17,7 @@ public class DirectoryTarget implements Target {
     private final Path root;
 
     private Path getPath(ClassDoc clazz) {
-        if (clazz.containingClass() == null) {
-            return root.resolve(clazz.qualifiedName().replace('.', '/') + EXTENSION);
-        } else {
-            Path containingPath = getPath(clazz.containingClass());
-            return containingPath.subpath(0, containingPath.getNameCount() - 1)
-                    .resolve(containingPath.getFileName().toString() + '.' + clazz.name() + EXTENSION);
-        }
+        return root.resolve(clazz.qualifiedName().replace('.', '/') + EXTENSION);
     }
 
     @Override
@@ -32,6 +26,7 @@ public class DirectoryTarget implements Target {
         if (!Files.isDirectory(targetFile.getParent())) {
             Files.createDirectories(targetFile.getParent());
         }
+        System.out.println("ow " + targetFile);
         return Files.newBufferedWriter(targetFile);
     }
 }
