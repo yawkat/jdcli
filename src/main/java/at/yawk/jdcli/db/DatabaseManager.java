@@ -163,6 +163,8 @@ public class DatabaseManager {
 
                                 // add class and packages to index
                                 String name = relative.toString().replace('/', '.');
+                                // remove .txt extension
+                                name = name.substring(0, name.length() - ".txt".length());
                                 while (indexed.add(name)) {
                                     indexWriter.write(name);
                                     indexWriter.write('\n');

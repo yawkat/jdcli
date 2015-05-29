@@ -12,15 +12,17 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class DirectoryTarget implements Target {
+    private static final String EXTENSION = ".txt";
+
     private final Path root;
 
     private Path getPath(ClassDoc clazz) {
         if (clazz.containingClass() == null) {
-            return root.resolve(clazz.qualifiedName().replace('.', '/'));
+            return root.resolve(clazz.qualifiedName().replace('.', '/') + EXTENSION);
         } else {
             Path containingPath = getPath(clazz.containingClass());
             return containingPath.subpath(0, containingPath.getNameCount() - 1)
-                    .resolve(containingPath.getFileName().toString() + '.' + clazz.name());
+                    .resolve(containingPath.getFileName().toString() + '.' + clazz.name() + EXTENSION);
         }
     }
 

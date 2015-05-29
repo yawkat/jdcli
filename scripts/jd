@@ -11,7 +11,7 @@ if ! test "$class_name"; then
     exit 1
 fi
 
-class_file="$CLASS_DIR/"$(echo $class_name | sed 's_\._/_g')
+class_file="$CLASS_DIR/"$(echo $class_name | sed 's_\._/_g').txt
 
 if ! [ -f "$class_file" ]; then
     echo "Class not found: $class_name" >&2
