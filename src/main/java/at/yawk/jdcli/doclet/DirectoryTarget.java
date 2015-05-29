@@ -26,7 +26,6 @@ public class DirectoryTarget implements Target {
         if (!Files.isDirectory(targetFile.getParent())) {
             Files.createDirectories(targetFile.getParent());
         }
-        System.out.println("ow " + targetFile);
         return Files.newBufferedWriter(targetFile);
     }
 }
